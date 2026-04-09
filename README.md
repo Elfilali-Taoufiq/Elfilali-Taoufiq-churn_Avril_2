@@ -1,1 +1,1 @@
-# Elfilali-Taoufiq-churn_Avril_2
+# Project to predict clients churn using Logistic regression model
