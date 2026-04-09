@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Churn Prediction</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center">
+
+<div class="bg-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-[420px] text-white">
+
+    <h2 class="text-2xl font-bold text-center mb-6">Churn Prediction</h2>
+
+    <form action="/predict-ui" method="post" class="space-y-4">
+
+        <!-- Age -->
+        <div>
+            <label class="text-sm">Age</label>
+            <input type="number" name="Age" step="any" required
+                value="{{ values.Age if values }}"
+                class="w-full mt-1 p-3 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white">
+        </div>
+
+        <!-- Account Manager -->
+        <div>
+            <label class="text-sm">Account Manager</label>
+            <select name="Account_Manager"
+                class="w-full mt-1 p-3 rounded-lg bg-white/20 border border-white/30 text-white">
+                <option value="1" {% if values and values.Account_Manager == '1' %}selected{% endif %}>Yes</option>
+                <option value="0" {% if values and values.Account_Manager == '0' %}selected{% endif %}>No</option>
+            </select>
+        </div>
+
+        <!-- Years -->
+        <div>
+            <label class="text-sm">Years</label>
+            <input type="number" name="Years" step="any" required
+                value="{{ values.Years if values }}"
+                class="w-full mt-1 p-3 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white">
+        </div>
+
+        <!-- Num Sites -->
+        <div>
+            <label class="text-sm">Number of Sites</label>
+            <input type="number" name="Num_Sites" step="any" required
+                value="{{ values.Num_Sites if values }}"
+                class="w-full mt-1 p-3 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white">
+        </div>
+
+        <!-- Button -->
+        <button type="submit"
+            class="w-full bg-white text-purple-700 font-semibold py-3 rounded-lg hover:bg-gray-200 transition duration-200">
+            Predict
+        </button>
+    </form>
+
+    <!-- Result -->
+    {% if prediction is not none %}
+        <div class="mt-6 p-4 rounded-lg text-center 
+            {% if prediction == 1 %} bg-red-500/30 {% else %} bg-green-500/30 {% endif %}">
+            
+            <p class="text-lg font-semibold">
+                {{ "Churn ⚠️" if prediction == 1 else "No Churn ✅" }}
+            </p>
+
+            {% if proba %}
+                <p class="text-sm mt-1">Confidence: {{ proba }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Error -->
+    {% if error %}
+        <div class="mt-6 p-4 rounded-lg bg-red-600/40 text-center">
+            {{ error }}
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
